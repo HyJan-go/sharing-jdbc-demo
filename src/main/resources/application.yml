@@ -1,4 +1,4 @@
-#  分库分表 + 读写分离配置
+#  分库分表 + 读写分离配置 + 数据脱敏
 ### --------------------------------------------------------- 类aBbCc  在yml配置 a-bb-cc
 spring:
   shardingsphere:
@@ -237,10 +237,45 @@ spring:
           key-generator:
             column: id
             type: 'SNOWFLAKE'
+      #  数据脱敏规则
+      encrypt-rule:
+        encryptors:
+          # 自定义名称： aes
+          aes_encryptor:
+            type: aes
+            # 属性配置,可以看源码，get的时候get的字符串是啥，进行配置
+            props:
+              # 加密的秘钥值
+              aes.key.value: HyJan-go-study
+        # 需要进行加密的表字段
+        tables:
+          user:
+            cloums:
+              email:
+                # 存储明文数据(选填)
+                # plainColumn:
+                # 存储密文数据(必填)
+                cipherColumn: email
+                # 官网，进行SQL编写的时候是啥（logicColumn）；本源码：org.apache.shardingsphere.encrypt.yaml.config.YamlEncryptColumnRuleConfiguration
+#                assistedQueryColumn: email
+                # 加密器吗名称：跟上面自定义的名称要一直
+                encryptor: aes_encryptor
     props:
       # 是否打印逻辑SQL语句和实际SQL语句，建议调试时打印，在生产环境关闭
       sql:
         show: true
+      check:
+        table:
+          metadata: true
+          # 是否在启动时检查分表元数据一致性
+          enabled: true
+      query:
+        with:
+          cipher:
+            column: true #是否使用密文列查询
+
+  main:
+    allow-bean-definition-overriding: true
 
 # 是否输出Mybatis-Plus代执行的SQL语句
 logging:
@@ -251,4 +286,11 @@ server:
   port: 8888
 
 mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-not-delete-value: 0
+      logic-delete-value: 1
   mapper-locations: classpath:com/*Mapper.xml
+  typeAliasesPackage: com.db.sharingjdbcdemo.model.domain

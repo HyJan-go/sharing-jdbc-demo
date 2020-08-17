@@ -13,4 +13,10 @@
     <!--@mbg.generated-->
     id, username, `size`, email
   </sql>
+  <update id="updateEmailById">
+      update user
+      set email = #{email}
+      where id = #{id}
+  </update>
+
 </mapper>

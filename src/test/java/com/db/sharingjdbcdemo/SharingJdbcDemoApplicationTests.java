@@ -31,9 +31,12 @@ public class SharingJdbcDemoApplicationTests {
         User user = new User();
         user.setId(3L);
         user.setSize(126);
-        user.setEmail(RandomUtil.randomString(9));
+        String email = RandomUtil.randomString(9);
+        user.setEmail(email);
+        System.out.println(email);
         user.setUsername("黄俊杰");
         userService.save(user);
+//        userService.updateEmailById(user);
     }
 
     @Test
