@@ -240,7 +240,7 @@ spring:
       #  数据脱敏规则
       encrypt-rule:
         encryptors:
-          # 自定义名称： aes
+          # 自定义名称： aes_encryptor
           aes_encryptor:
             type: aes
             # 属性配置,可以看源码，get的时候get的字符串是啥，进行配置

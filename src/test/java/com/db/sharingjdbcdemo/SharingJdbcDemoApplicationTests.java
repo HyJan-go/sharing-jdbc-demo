@@ -29,8 +29,8 @@ public class SharingJdbcDemoApplicationTests {
     @Test
     public void testInsert(){
         User user = new User();
-        user.setId(3L);
-        user.setSize(126);
+//        user.setId(3L);
+        user.setSize(0);
         String email = RandomUtil.randomString(9);
         user.setEmail(email);
         System.out.println(email);
